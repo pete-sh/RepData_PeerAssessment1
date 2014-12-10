@@ -1,6 +1,4 @@
 ---
-PETER SUHNER: THIS IS PROBABLY MY CODE, but probably not - check!!!
-====================================
 title: "Reproducible Research: Peer Assessment 1 - Peter Suhner"
 output: 
   html_document: 
