@@ -1,25 +1,81 @@
----
-title: "Reproducible Research: Peer Assessment 1"
+title: "Reproducible Research: Peer Assessment 1 - Peter Suhner"
 output: 
-  html_document:
+  html_document: 
     keep_md: true
 ---
 
-
 ## Loading and preprocessing the data
+1. Load the data (i.e. read.csv())
+   (the data is expected to reside in current directory under the name of "activity.csv")
+```{r}
+require("knitr")
 
+Wrk_Path <- "S:/D/_Data_Management_Strategical/Data_Science/_COURSERA_STUFF/Course_5_Reproducible_Research/Peer_Assessment_1"
+In_Path <- paste(Wrk_Path, "InputData", sep="/")
+In_File <- paste(In_Path, "activity.csv", sep="/")
+act <- read.csv(In_File)
+```
+- A quick overview of the data structure and contents
+```{r}
+summary(act)
+rbind(head(act, 5), tail(act, 5))
+sum(complete.cases(act))
+```
 
+2.Process/transform the data (if necessary) into a format suitable for your analysis
+```{r}
+steps_d      <- aggregate(steps ~ date, data=act, FUN=sum)
+head(steps_d, 5)
+steps_i <- aggregate(steps ~ interval, data=act, FUN=mean)
+head(steps_i, 5)
+```
 
 ## What is mean total number of steps taken per day?
+For this part of the work, missing values in the dataset are ignored.
 
+1. Histogram of the <b>total number of steps</b> 
+   taken <b>each day</b>
 
+```{r}
+barplot(steps_d$steps, names.arg=steps_d$date, xlab="Date", ylab="# Steps")
+```
+
+2. Calculate and report the <b>mean</b> 
+   and <b>median total number of steps</b> 
+   taken <b>per day</b>
+```{r}
+mean(steps_d$steps)
+median(steps_d$steps)
+```
 
 ## What is the average daily activity pattern?
+1. Time series plot (i.e. type = "l") of the <b>5-minute interval</b> (x-axis) 
+   and the <b>average number of steps taken</b>, 
+   <b>averaged across all days</b> (y-axis)
+```{r}
+plot(steps_i, type="l")
+```
 
+
+2. Which <b>5-minute interval</b>, 
+   on average across all the days in the dataset, 
+   contains the <b>maximum number of steps</b>?
+   - fetch the element number and display the contents 
+```{r}
+max_steps_element <- which.max(steps_i$steps)
+steps_i[max_steps_element, ]
+```
 
 
 ## Imputing missing values
+1. Calculate and report the total <b>number of missing values</b> in the
+   dataset (i.e. the total number of rows with `NA`s)
 
+```{r}
+sum(!complete.cases(act))
+```
+2. Devise a <b>strategy for filling in all of the missing values</b> in the
+   dataset. The strategy does not need to be sophisticated. For
+   example, you could use the mean/median for that day, or the mean
+   for that 5-minute interval, etc.
 
-
-## Are there differences in activity patterns between weekdays and weekends?
