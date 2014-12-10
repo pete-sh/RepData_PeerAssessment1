@@ -1,3 +1,6 @@
+---
+PETER SUHNER: THIS IS PROBABLY MY CODE, but probably not - check!!!
+====================================
 title: "Reproducible Research: Peer Assessment 1 - Peter Suhner"
 output: 
   html_document: 
@@ -79,3 +82,28 @@ sum(!complete.cases(act))
    example, you could use the mean/median for that day, or the mean
    for that 5-minute interval, etc.
 
+I will use the mean for the 5-minute interval s as replacement for missing
+values.
+
+3. Create a new dataset that is equal to the original dataset but with
+   the missing data filled in.
+
+```{r}
+## merge original activity data frame with interval data frame
+my_act <- merge(act, steps_i, by = 'interval', all.y = FALSE)
+
+## merge NA values with averages rounding up for integers
+my_act$steps.y[is.na(my_act$steps.x)] <- as.integer(
+        round(my_act$mean_steps[is.na(my_act$steps.x), ]))
+
+my_act$steps.x[is.na(my_act$steps.x)] <- as.integer(round(my_act$steps.y[is.na(my_act$steps.x)]))
+
+## drop obsolete column by renaming to original names and reordering identical to original data frame
+names(my_act) <- c("interval", "steps","date","obsolete")
+my_act <- my_act[names(act)]
+```
+
+
+
+
+## Are there differences in activity patterns between weekdays and weekends?
